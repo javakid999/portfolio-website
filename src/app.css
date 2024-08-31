@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+.red {
+    display: inline;
+    background: linear-gradient(90deg, rgba(255,149,0,1) 0%, rgba(255,0,0,1) 100%);
+    background-clip: text;
+    color: transparent;
+}
+.blue {
+    display: inline;
+    background: linear-gradient(90deg, rgb(0, 89, 255) 0%, rgb(50, 241, 255) 100%);
+    background-clip: text;
+    color: transparent;
+}
+.yellow {
+    display: inline;
+    background: linear-gradient(90deg, rgb(255, 234, 0) 0%, rgb(99, 255, 59) 100%);
+    background-clip: text;
+    color: transparent;
+}
+.purple {
+    display: inline;
+    background: linear-gradient(90deg, rgb(130, 27, 255) 0%, rgba(255,0,202,1) 100%);
+    background-clip: text;
+    color: transparent;
+}
