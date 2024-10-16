@@ -91,8 +91,8 @@ void main() {
     uv *= 2.0;
     vec2 pos = vec2(1.0/7.0, sqrt(3.0)/14.0);
     float time = min(mod(iTime-2.0,6.0)+2.0,iTime);
-    uv.x = map(uv.x, -1.0, 1.0, -1.0/pow(3.0, time) + pos.x, 1.0/pow(3.0, time) + pos.x);
-    uv.y = map(uv.y, -1.0, 1.0, -1.0/pow(3.0, time) + pos.y, 1.0/pow(3.0, time) + pos.y);
+    uv.x = sserp(map(uv.x, -1.0, 1.0, -1.0/pow(3.0, time), 1.0/pow(3.0, time)),  map(uv.x, -1.0, 1.0, -1.0/pow(3.0, time) + pos.x, 1.0/pow(3.0, time) + pos.x), min(iTime/2.0, 1.0));
+    uv.y = sserp(map(uv.y, -1.0, 1.0, -1.0/pow(3.0, time) - 0.25, 1.0/pow(3.0, time) - 0.25), map(uv.y, -1.0, 1.0, -1.0/pow(3.0, time) + pos.y, 1.0/pow(3.0, time) + pos.y), min(iTime/2.0, 1.0));
     vec3 col = vec3(0.0);
 
     if (sdTri(uv, 0.5) < 0.0) {
