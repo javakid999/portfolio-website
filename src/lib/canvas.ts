@@ -119,7 +119,7 @@ export class Canvas {
                     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
                     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
 
-                    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 8, 8, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image!);
+                    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, image.width, image.height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image!);
                     this.gl.uniform1i(this.uniforms[name].location, data);
                 }
         }
@@ -141,6 +141,66 @@ export class Canvas {
     }
 }
 
+export class ShaderDisplayCanvas extends Canvas {
+    time: number;
+    hovering: boolean;
+
+    constructor(element: HTMLCanvasElement, width: number, height: number) {
+        super(element, width, height);
+        this.time = 0;
+        this.hovering = false;
+    }
+
+    enter() {
+        this.hovering = true;
+    }
+
+    leave() {
+        this.hovering = false;
+    }
+
+    update() {
+        if (!this.hovering) return;
+        console.log('hello')
+        this.uniformData('iTime', this.time);
+        this.time += 1/60;
+        this.render();
+    }
+}
+
+export class PortfolioButtonCanvas extends Canvas {
+    time: number;
+    heldTime: number;
+    hovering: boolean;
+
+    constructor(element: HTMLCanvasElement, width: number, height: number) {
+        super(element, width, height);
+        this.time = 0;
+        this.heldTime = 0;
+        this.hovering = false;
+    }
+
+    enter() {
+        this.hovering = true;
+    }
+
+    leave() {
+        this.hovering = false;
+    }
+
+    update() {
+        if (this.hovering && this.heldTime < 1) {
+            this.heldTime += 0.002;
+        } else if (!this.hovering && this.heldTime > 0) {
+            this.heldTime -= 0.004;
+        }
+        this.uniformData('rot_factor', this.heldTime);
+        this.uniformData('iTime', this.time);
+        this.time += 1/60;
+        this.render();
+    }
+}
+
 // this is a little bit of a reminder to myself because every time i have to write this fucking boilerplate
 // i forget how this works. gl.ARRAY_BUFFER is not just a value that tells webgl what kind of buffer it is,
 // it binds the buffer to a global variable which you then use to give shit to the program
@@ -149,7 +209,7 @@ export class Canvas {
 // vaos are a collection of how to access attributes. it will contain all the settings you have for giving data to
 // attributes *only*. what happens when you bind it, is you are telling it to listen to all the pointers you set for them,
 // so you bind it, make all the pointers, and then unbind it. right before you render the things which require the attributes
-// you rebind it, and it skips having to set all of those every single frame. 
+// you rebind it, and it skips having to set all of those every single frame.
 
 export enum UniformType {
     Float,

@@ -1,12 +1,16 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import Dragwindow from "./Dragwindow.svelte";
-    import { Canvas, UniformType } from "./canvas";
-    import vsrcTest from '../shaders/snowflake/vertex.glsl?raw';
-    import fsrcTest from '../shaders/snowflake/fragment.glsl?raw';
+    import { ShaderDisplayCanvas, UniformType } from "./canvas";
+    import type { CanvasManager } from "./canvasManager";
+
+    export let canvasManager: CanvasManager;
+    
     let viewportWidth: number, viewportHeight: number;
     let canvasElement: HTMLCanvasElement;
-    let c: Canvas;
+    let canvasElement2: HTMLCanvasElement;
+    let c: ShaderDisplayCanvas;
+    let c2: ShaderDisplayCanvas;
     let isRunning = false;
     let time = 0;
     onMount(() => {
@@ -17,8 +21,9 @@
             star.style.transform = `translate(${starPositions[i*2]}em, ${starPositions[i*2+1]}em)`
         });
 
-        c = new Canvas(canvasElement, 150, 150);
-        c.compileProgram(vsrcTest, fsrcTest);
+        c = new ShaderDisplayCanvas(canvasElement, 150, 150);
+
+        c.compileProgram(canvasManager.programs['snowflake'].vertex, canvasManager.programs['snowflake'].fragment);
         c.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
         c.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
         c.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
@@ -27,29 +32,32 @@
         c.uniformData('iTime', 0);
         c.addUniform('iChannel0', UniformType.Texture2D, 1);
 
-        const bayer = new Image();
-        bayer.src = "./src/assets/bayer8.png";
-        bayer.onload = function() {
-            c.uniformData('iChannel0', 0, bayer);
-            c.render();
-        }
+        c2 = new ShaderDisplayCanvas(canvasElement2, 300, 300);
+
+        c2.compileProgram(canvasManager.programs['donut'].vertex, canvasManager.programs['donut'].fragment);
+        c2.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c2.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c2.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c2.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c2.addUniform('iTime', UniformType.Float, 1);
+        c2.uniformData('iTime', 0);
+        c2.addUniform('iChannel0', UniformType.Texture2D, 1);
+        c2.addUniform('iChannel1', UniformType.Texture2D, 1);
+
+        c.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
+        c2.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
+        c2.uniformData('iChannel1', 1, canvasManager.assets['times_ascii']);
+
+        c.render();
+        c2.render();
+
+        renderTick();
     })
 
     function renderTick() {
-        if (!isRunning) return;
-        c.uniformData('iTime', time);
-        time += 1/60;
-        c.render();
+        c.update();
+        c2.update();
         requestAnimationFrame(renderTick);
-    }
-
-    function startTick() {
-        isRunning = true;
-        requestAnimationFrame(renderTick);
-    }
-
-    function stopTick() {
-        isRunning = false;
     }
 </script>
 
@@ -105,9 +113,15 @@
         <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"horrific_beast.jpg"} id={2}>
             <img src="./src/assets/cat2.jpg" alt="kitty" />
         </Dragwindow>
-        <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"snowflake"} id={3}>
-            <div id="canvas-wrapper" role="button" tabindex=0 on:mouseenter={startTick} on:mouseleave={stopTick}>
+        <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"snowflake.exe"} id={3}>
+            <div id="canvas-wrapper" role="button" tabindex=0 on:mouseenter={() => c.enter()} on:mouseleave={() => c.leave()}>
                 <canvas bind:this={canvasElement} />
+            </div>
+        </Dragwindow>
+
+        <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"donut_ascii.exe"} id={4}>
+            <div id="canvas-wrapper-2" role="button" tabindex=0 on:mouseenter={() => c2.enter()} on:mouseleave={() => c2.leave()}>
+                <canvas bind:this={canvasElement2} />
             </div>
         </Dragwindow>
 

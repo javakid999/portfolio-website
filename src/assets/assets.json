@@ -1,0 +1,14 @@
+{
+    "shaders": [
+        {"name": "test", "link_v": "./src/assets/shaders/test/vertex.glsl", "link_f": "./src/assets/shaders/test/fragment.glsl"},
+        {"name": "donut", "link_v": "./src/assets/shaders/donut/vertex.glsl", "link_f": "./src/assets/shaders/donut/fragment.glsl"},
+        {"name": "polyhedra", "link_v": "./src/assets/shaders/polyhedra/vertex.glsl", "link_f": "./src/assets/shaders/polyhedra/fragment.glsl"},
+        {"name": "snowflake", "link_v": "./src/assets/shaders/snowflake/vertex.glsl", "link_f": "./src/assets/shaders/snowflake/fragment.glsl"},
+        {"name": "metaballs", "link_v": "./src/assets/shaders/metaballs/vertex.glsl", "link_f": "./src/assets/shaders/metaballs/fragment.glsl"},
+        {"name": "mandelbrot", "link_v": "./src/assets/shaders/mandelbrot/vertex.glsl", "link_f": "./src/assets/shaders/mandelbrot/fragment.glsl"}
+    ],
+    "images": [
+        {"name": "bayer", "link": "./src/assets/bayer8.png"},
+        {"name": "times_ascii", "link": "./src/assets/times_ascii.png"}
+    ]
+}

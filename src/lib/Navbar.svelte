@@ -1,4 +1,19 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+
+   const dispatch = createEventDispatcher();
+   
+    function swtichPortfolio() {
+        dispatch('message', {
+            page: 'portfolio'
+        });
+    }
+
+    function switchHome() {
+        dispatch('message', {
+            page: 'home'
+        })
+    }
 </script>
 
 <div id="main">
@@ -41,7 +56,8 @@
     
         <div id="navbar">
         <span id="navbar-options">
-            <span class="navbar-item" id="navbar-home">
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span class="navbar-item" id="navbar-home" on:click={switchHome} tabindex="0" role="button">
             <img src="./icons/home_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="home button" />
             <p>Home</p>
             </span>
@@ -56,6 +72,11 @@
             <span class="navbar-item" id="navbar-about">
             <img src="./icons/about_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="about button" />
             <p>About</p>
+            </span>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span class="navbar-item" id="navbar-portfolio" on:click={swtichPortfolio} tabindex="0" role="button">
+                <img src="./icons/portfolio_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="portfolio button" />
+                <p>Portfolio</p>
             </span>
             <span class="navbar-item" id="navbar-atlas">
             <img src="./icons/home_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="atlas button" />
@@ -140,8 +161,16 @@
         animation-iteration-count: 1, infinite;
         animation-delay: 0s, 1.25s;
     }
+    .navbar-item:active {
+        animation: bounce 1s cubic-bezier(.67,0,.25,1) infinite;
+    }
     .navbar-item p {
         margin: 0;
+    }
+    @keyframes bounce {
+        0% {transform: translateY(0)}
+        50% {transform: translateY(-20px)}
+        100% {transform: translateY(0)}
     }
     @keyframes flip {
         0% {transform: rotate3d(1,0.5,1,0)}

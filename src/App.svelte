@@ -1,16 +1,30 @@
 <script lang="ts">
-  import Navbar from "./lib/Navbar.svelte";
-  import Home from "./lib/Home.svelte";
+    import Home from "./lib/Home.svelte";
+    import Navbar from "./lib/Navbar.svelte";
+    import Portfolio from "./lib/Portfolio.svelte";
 
-  let isShown = false;
+    export let canvasManager;
+
+    let isShown = false;
+    let mainWindow: HTMLDivElement;
+    let page = Home;
+
+    function changePage(event: any) {
+        if (event.detail.page == "portfolio") {
+            page = Portfolio;
+        }
+        if (event.detail.page == 'home') {
+            page = Home;
+        }
+    }
 </script>
 
 <main>
   <div id='browser-container'>
     <img id="spotlight-overlay" class:shown={isShown} src="./spotlight.svg" alt="cringus"/>
-    <Navbar></Navbar>  
-    <div id="main-window">
-      <Home></Home>
+    <Navbar on:message={changePage}></Navbar>  
+    <div id="main-window" bind:this={mainWindow}>
+      <svelte:component this={page} canvasManager={canvasManager} />
     </div>
     <div id="nav-deco-bottom">
       <div id="music-player">
