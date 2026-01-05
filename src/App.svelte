@@ -1,6 +1,9 @@
 <script lang="ts">
+    import About from "./lib/About.svelte";
+    import Blender from "./lib/Blender.svelte";
+    import MusicPlayer from "./lib/home-screen/MusicPlayer.svelte";
+    import Navbar from "./lib/home-screen/Navbar.svelte";
     import Home from "./lib/Home.svelte";
-    import Navbar from "./lib/Navbar.svelte";
     import Portfolio from "./lib/Portfolio.svelte";
 
     export let canvasManager;
@@ -16,28 +19,32 @@
         if (event.detail.page == 'home') {
             page = Home;
         }
+        if (event.detail.page == 'about') {
+            page = About;
+        }
+        if (event.detail.page == 'blender') {
+            page = Blender;
+        }
     }
 </script>
 
 <main>
   <div id='browser-container'>
     <img id="spotlight-overlay" class:shown={isShown} src="./spotlight.svg" alt="cringus"/>
-    <Navbar on:message={changePage}></Navbar>  
+    <Navbar on:message={changePage}></Navbar>
     <div id="main-window" bind:this={mainWindow}>
       <svelte:component this={page} canvasManager={canvasManager} />
     </div>
     <div id="nav-deco-bottom">
-      <div id="music-player">
-        <audio id='player' autoplay controls src="fs1.mp3"></audio>
-      </div>
-      <div id="donate-button" tabindex="0" role="button" on:mouseenter={() => isShown=true} on:mouseleave={() => isShown=false}>
+      <MusicPlayer></MusicPlayer>
+      <a href="https://ko-fi.com/orangelazer1" target="_blank"><div id="donate-button" tabindex="0" role="button" on:mouseenter={() => isShown=true} on:mouseleave={() => isShown=false}>
         <img src="./money.gif" style="image-rendering: pixelated; width: 4em; height: 4em;" alt="penis" />
-      </div>
+      </div></a>
     </div>
   </div>
 </main>
 
-<style> 
+<style>
   #browser-container {
     padding: 0.8vh;
     height: 98.4vh;
@@ -47,18 +54,15 @@
     flex-direction: column;
   }
   #main-window {
-    flex: 1;
+    max-height: 75vh;
   }
   #nav-deco-bottom {
+    margin-top: auto;
     width: 100%;
     display: flex;
-    margin-top: auto;
     align-self: flex-end;
   }
-  #music-player {
-    align-self: flex-start;
-    margin: auto auto auto 0;
-  }
+  
   @keyframes rainbow {
     0% {filter: hue-rotate(0)}
     100% {filter: hue-rotate(360deg)}
@@ -74,7 +78,7 @@
   }
   @keyframes move-in {
     from {transform: translate(-50%, -45%)}
-    to {transform: translate(-34%, -38%)}
+    to {transform: translate(-34%, -30%)}
   }
   #spotlight-overlay {
     width: 200%;
@@ -87,7 +91,7 @@
   #spotlight-overlay.shown {
     display: block;
     animation: fade-in 0.2s linear 1, move-in 0.4s cubic-bezier(0,.68,.38,1) 1;
-    transform: translate(-34%, -38%);
+    transform: translate(-34%, -30%);
     opacity: 1;
   }
   #donate-button:hover {

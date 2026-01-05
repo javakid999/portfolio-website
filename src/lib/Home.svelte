@@ -76,7 +76,7 @@
                 <span class="wave" style="--i:2">o</span>
                 <span class="wave" style="--i:3">v</span>
                 <span class="wave" style="--i:4">e</span>
-            </span>when you hover over them!<br/>
+            </span>when you click on them, and can be dragged around!<br/>
             But <span class="red">beware</span>! There may be more to this site than meets the eye!<br/>
             Thank you for reading traveller, and happy surfing ;-)<br/>
             <span class="yellow">This website is best experienced in fullscreen!</span>
@@ -105,13 +105,32 @@
             <img class="star-deco" alt="star" src="blinkies/anistarblinkr.gif"/>
             <img class="star-deco" alt="star" src="blinkies/anistarblinkr.gif"/>
             <img class="star-deco" alt="star" src="blinkies/anistarblinkr.gif"/>
+
+            <img id="venus" alt="venus" src="assets-home/venus.png">
+            <img id="saturn" alt="saturn" src="assets-home/saturn__spinningA.gif">
+            <img id="newton-man" alt="newton-man" src="assets-home/man.gif">
         </div>
+
+        <span id="space-images">
+            <div>
+                <img src="assets-home/12lightyears.gif" alt="map of stars within 12 ly" height="300px"/>
+                <img src="assets-home/stars-within-20-ly.gif" alt="map of stars within 12 ly" height="300px"/>
+            </div>
+            <div>
+                <img src="assets-home/WMAP_2012.png" alt="CMB" height="200px"/>
+                <img src="assets-home/cosmic web.jpg" alt="cw" height="200px"/>
+                <img src="assets-home/powers_of_ten.jpeg" alt="pot" height="200px"/>
+            </div>
+        </span>
 
         <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"odd_guy.jpg"} id={1}>
             <img src="./src/assets/cat1.jpg" alt="kitty" />
         </Dragwindow>
         <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"horrific_beast.jpg"} id={2}>
             <img src="./src/assets/cat2.jpg" alt="kitty" />
+        </Dragwindow>
+        <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"summer_topster.png"} id={5}>
+            <img src="./assets-home/topster.png" style="width:300px;height:300px;" alt="chart" />
         </Dragwindow>
         <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"snowflake.exe"} id={3}>
             <div id="canvas-wrapper" role="button" tabindex=0 on:mouseenter={() => c.enter()} on:mouseleave={() => c.leave()}>
@@ -188,8 +207,8 @@
         overflow-y: auto;
     }
     #viewport-wrapper {
-        height: 130%;
-        overflow:hidden;
+        height: 130svh;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -319,5 +338,23 @@
     }
     .star-deco {
         position: absolute;
+    }
+    #venus {
+        position: absolute;
+        top: 500px;
+        left:200px;
+        transform: rotate(100deg);
+    }
+    #saturn {
+        position: absolute;
+        top: 200px;
+        right: 200px;
+        transform: rotate(-50deg) scale(50%);
+    }
+    #newton-man {
+        position: absolute;
+        top: 600px;
+        right: 100px;
+        transform: rotate(-50deg);
     }
 </style>

@@ -1,3 +1,5 @@
+import { ParticleSimulation } from "./particleSimulation";
+
 export class Canvas {
     element: HTMLCanvasElement;
     gl: WebGL2RenderingContext;
@@ -72,6 +74,7 @@ export class Canvas {
     }
 
     attributeData(name: string, data: Float32Array) {
+        this.gl.bindBuffer(this.attributes[name].bufferType, this.attributes[name].buffer);
         this.gl.bufferData(this.attributes[name].bufferType, data, this.gl.STATIC_DRAW);
         if (this.attributes[name].isVertexData) this.drawLength[name] = Math.floor((data.length - this.attributes[name].offset) / this.attributes[name].size / (this.attributes[name].stride == 0 ? 1 : this.attributes[name].stride));
     }
@@ -161,7 +164,6 @@ export class ShaderDisplayCanvas extends Canvas {
 
     update() {
         if (!this.hovering) return;
-        console.log('hello')
         this.uniformData('iTime', this.time);
         this.time += 1/60;
         this.render();
@@ -190,13 +192,43 @@ export class PortfolioButtonCanvas extends Canvas {
 
     update() {
         if (this.hovering && this.heldTime < 1) {
-            this.heldTime += 0.002;
+            this.heldTime += 0.08;
         } else if (!this.hovering && this.heldTime > 0) {
-            this.heldTime -= 0.004;
+            this.heldTime -= 0.04;
         }
         this.uniformData('rot_factor', this.heldTime);
         this.uniformData('iTime', this.time);
         this.time += 1/60;
+        this.render();
+    }
+}
+
+export class ParticleSimCanvas extends Canvas {
+    sim: ParticleSimulation;
+    frames: number;
+    constructor(element: HTMLCanvasElement, width: number, height: number) {
+        super(element, width, height);
+        const colors: number[][] = [];
+        for (let i = 0; i < 500; i++) {
+            let l = Math.random()*200;
+            colors.push([l/2, l, 255]);
+        }
+        this.frames = 0;
+        this.sim = new ParticleSimulation(colors);
+    }
+
+    update(dx: number, dy: number) {
+        let [vertexPosition, vertexColor, circleColor] = this.sim.draw_scene();
+
+        this.attributeData('vertexPosition', new Float32Array(vertexPosition));
+        this.attributeData('vertexColor', new Float32Array(vertexColor));
+        this.attributeData('circleColor', new Float32Array(circleColor));
+
+        this.sim.update_physics(dx, dy);
+        if (this.frames < 500) {
+            this.sim.add_ball(300,450,7);
+        }
+        this.frames += 1;
         this.render();
     }
 }
