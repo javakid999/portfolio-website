@@ -65,15 +65,15 @@
         </div>
     </Dragwindow>
     <span id="stamps">
-        <img src="./src/assets/large blinkies/vaporwave.png" alt="vaporwave" style="width:88px;height:31px;"/>
-        <img src="./src/assets/large blinkies/88x31nocookie.gif" alt="cookies"/>
-        <img src="./src/assets/large blinkies/88x31neocities.gif" alt="neocities"/>
-        <img src="./src/assets/large blinkies/88x31computer.gif" alt="computer"/>
+        <img src="assets/large blinkies/vaporwave.png" alt="vaporwave" style="width:88px;height:31px;"/>
+        <img src="assets/large blinkies/88x31nocookie.gif" alt="cookies"/>
+        <img src="assets/large blinkies/88x31neocities.gif" alt="neocities"/>
+        <img src="assets/large blinkies/88x31computer.gif" alt="computer"/>
     </span>
     <div id="pika">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <img src="./src/assets/pikachu.gif" alt="pika" style="width: 400px;" on:click={createPikachu}/>
+        <img src="assets/pikachu.gif" alt="pika" style="width: 400px;" on:click={createPikachu}/>
     </div>
     <span id="pikachu-virus" bind:this={pikaVirus}></span>
 </div>

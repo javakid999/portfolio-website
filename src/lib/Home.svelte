@@ -127,10 +127,10 @@
     </span>
 
     <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"odd_guy.jpg"} id={1}>
-        <img src="./src/assets/cat1.jpg" alt="kitty" />
+        <img src="./assets/cat1.jpg" alt="kitty" />
     </Dragwindow>
     <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"horrific_beast.jpg"} id={2}>
-        <img src="./src/assets/cat2.jpg" alt="kitty" />
+        <img src="./assets/cat2.jpg" alt="kitty" />
     </Dragwindow>
     <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"summer_topster.png"} id={5}>
         <img src="./assets-home/topster.png" style="width:300px;height:300px;" alt="chart" />
