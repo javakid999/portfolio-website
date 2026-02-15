@@ -189,7 +189,7 @@
   #song-selector {
     color: #ffffff00;
     background: none;
-    background-image: url('musicgif.gif');
+    background-image: url('/musicgif.gif');
     image-rendering: pixelated;
     background-size: 100%;
     border: none;
@@ -259,7 +259,7 @@
     position: absolute;
     user-select: none;
     pointer-events: none;
-    background-image: url('music/rainbow.png');
+    background-image: url('/music/rainbow.png');
     background-repeat: repeat-x;
     animation: rainbow-wave 1s infinite linear;
     width: var(--play-position);
@@ -299,7 +299,7 @@
     align-items: center;
     gap: 0.5em;
     padding: 5px;
-    background-image: url('backgrounds/waterfall.jpg');
+    background-image: url('/backgrounds/waterfall.jpg');
     align-self: flex-start;
     margin: auto auto auto 0;
     image-rendering: pixelated;

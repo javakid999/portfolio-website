@@ -34,7 +34,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('blender/fractal planet.png');
+        background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/blender/fractal planet.png');
         background-size: 100vw;
         filter: brightness(0.5) blur(3px);
     }

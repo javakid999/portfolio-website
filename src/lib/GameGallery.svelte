@@ -18,7 +18,7 @@
         width: 1000px;
         height: 500px;
         overflow-y: scroll;
-        background-image: url('./backgrounds/water.jpg');
+        background-image: url('/backgrounds/water.jpg');
         background-size: 15vw;
         color: white;
     }

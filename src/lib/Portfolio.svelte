@@ -36,7 +36,7 @@
 
 <style>
     #viewport-wrapper {
-        background-image: url('./backgrounds/frutiger-aero.jpeg');
+        background-image: url('/backgrounds/frutiger-aero.jpeg');
         background-size: 100vw;
         background-position-y: center;
         text-align: center;

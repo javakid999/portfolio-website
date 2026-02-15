@@ -85,7 +85,7 @@
         object-fit: cover;
     }
     #viewport-wrapper {
-        background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('backgrounds/bubbles2.jpg');
+        background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/backgrounds/bubbles2.jpg');
         background-size: 30vw;
         text-align: center;
         height: 100svh;
