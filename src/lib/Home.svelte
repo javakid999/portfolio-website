@@ -201,7 +201,7 @@
 
 <style>
     #viewport-wrapper {
-        background-image: url('./backgrounds/galaxy0.gif');
+        background-image: url('backgrounds/galaxy0.gif');
         background-size: 15vw;
         height: 130svh;
         overflow: hidden;
