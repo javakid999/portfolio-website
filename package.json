@@ -20,5 +20,6 @@
   },
   "dependencies": {
     "gl-matrix": "^3.4.4"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }
