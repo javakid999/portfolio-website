@@ -26,6 +26,18 @@
             page: 'blender'
         });
     }
+
+    function switchAtlas() {
+        dispatch('message', {
+            page: 'atlas'
+        });
+    }
+
+    function switchBlog() {
+        dispatch('message', {
+            page: 'blog'
+        })
+    }
 </script>
 
 <div id="main">
@@ -73,26 +85,38 @@
             <img src="./icons/home_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="home button" />
             <p>Home</p>
             </span>
+
             <span class="navbar-item" id="navbar-music">
             <img src="./icons/music_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="music button" />
             <p>Music</p>
             </span>
+
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <span class="navbar-item" id="navbar-blender" on:click={switchBlender} tabindex="0" role="button">
             <img src="./icons/blender_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="blender button" />
             <p>3D Art</p>
             </span>
+
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <span class="navbar-item" id="navbar-about" on:click={switchAbout} tabindex="0" role="button">
             <img src="./icons/about_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="about button" />
             <p>About</p>
             </span>
+
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <span class="navbar-item" id="navbar-portfolio" on:click={swtichPortfolio} tabindex="0" role="button">
                 <img src="./icons/portfolio_button.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="portfolio button" />
                 <p>Portfolio</p>
             </span>
-            <span class="navbar-item" id="navbar-atlas">
+
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span class="navbar-item" id="navbar-blog" on:click={switchBlog} tabindex="0" role="button">
+            <img src="./icons/blog.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="atlas button" />
+            <p>Blog</p>
+            </span>
+
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span class="navbar-item" id="navbar-atlas" on:click={switchAtlas} tabindex="0" role="button">
             <img src="./icons/atlas_icon.png" style="image-rendering: pixelated; width: 3em; height: 3em;" alt="atlas button" />
             <p>Atlas</p>
             </span>

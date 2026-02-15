@@ -8,46 +8,39 @@
 
 </script>
 
-<div id="main">
-    <div id="viewport-wrapper" bind:clientWidth={viewportWidth} bind:clientHeight={viewportHeight}>
-        <div id="header">
-            <h1><u>Portfolio</u></h1>
-        </div>
-        <p>Here you will find all my past and present Computer Science projects!</p>
-        <PortfolioTabs canvasManager={canvasManager} viewportHeight={viewportHeight} viewportWidth={viewportWidth}></PortfolioTabs>
-        <div id="bubbles-left" class="bubble-column">
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:1" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:2" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:3" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:4" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:5" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:6" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:7" width="60px"/>
-        </div>
-        <div id="bubbles-right" class="bubble-column">
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:1" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:2" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:3" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:4" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:5" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:6" width="60px"/>
-            <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:7" width="60px"/>
-        </div>
+<div id="viewport-wrapper" bind:clientWidth={viewportWidth} bind:clientHeight={viewportHeight}>
+    <div id="header">
+        <h1><u>Portfolio</u></h1>
+    </div>
+    <p>Here you will find all my past and present Computer Science projects!</p>
+    <PortfolioTabs canvasManager={canvasManager} viewportHeight={viewportHeight} viewportWidth={viewportWidth}></PortfolioTabs>
+    <div id="bubbles-left" class="bubble-column">
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:1" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:2" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:3" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:4" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:5" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:6" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:7" width="60px"/>
+    </div>
+    <div id="bubbles-right" class="bubble-column">
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:1" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:2" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:3" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:4" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:5" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:6" width="60px"/>
+        <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:7" width="60px"/>
     </div>
 </div>
 
 <style>
-    #main {
+    #viewport-wrapper {
         background-image: url('./backgrounds/frutiger-aero.jpeg');
         background-size: 100vw;
         background-position-y: center;
-        width: 100%;
-        height: 100%;
         text-align: center;
-        overflow-y: auto;
-    }
-    #viewport-wrapper {
-        height: 150%;
+        height: 150svh;
         overflow:hidden;
         display: flex;
         flex-direction: column;

@@ -29,6 +29,28 @@ export async function LoadProgram(name: string, link_v: string, link_f: string) 
 	};
 }
 
+export async function LoadSkybox(name: string, links: string[]) {
+	const images = await Promise.all(
+		links.map((link) => new Promise((resolve, reject) => {
+			const image = new Image();
+			image.src = link;
+
+			image.onerror = (err) => {
+				reject(`Image ${link} failed to load: ${err}`);
+			};
+
+			image.onload = () => {
+				resolve(image);
+			}
+		}).catch((err) => console.error(err)))
+	);
+
+	return {
+		name,
+		images
+	}
+}
+
 export interface ProgramSrc {
     vertex: string;
     fragment: string;

@@ -7,23 +7,29 @@
     let audioVis: HTMLCanvasElement;
     let visMode = 1;
 
+    let current_time: number = 0;
+    let song_duration: number;
+
+    let progress_bar_paused = true;
+
     const song_url_lookup: {[key: string]: string} = {
-      "1":  "./music/01.ogg",
-      "2":  "./music/02.ogg",
-      "3":  "./music/03.flac",
-      "4":  "./music/04.flac",
-      "5":  "./music/05.flac",
-      "6":  "./music/06.flac",
+      "1":  "./music/01.mp3",
+      "2":  "./music/02.mp3",
+      "3":  "./music/03.mp3",
+      "4":  "./music/04.mp3",
+      "5":  "./music/05.mp3",
+      "6":  "./music/06.mp3",
       "7":  "./music/07.mp3",
-      "8":  "./music/08.wav",
+      "8":  "./music/08.mp3",
       "9":  "./music/09.m4a",
       "10": "./music/10.mp3",
       "11": "./music/11.mp3",
-      "12": "./music/12.wav",
-      "13": "./music/13.wav",
-      "14": "./music/14.flac",
-      "15": "./music/15.flac",
-      "16": "./music/16.flac",
+      "12": "./music/12.mp3",
+      "13": "./music/13.mp3",
+      "14": "./music/14.mp3",
+      "15": "./music/15.mp3",
+      "16": "./music/16.mp3",
+      "17": "./music/17.mp3",
     };
 
     const bpms: {[key: string]: number} = {
@@ -43,19 +49,22 @@
         "14": 96,
         "15": 120,
         "16": 154,
+        "17": 168,
     }
 
-        function change_song() {
+    function change_song() {
       music_player.src = song_url_lookup[current_song];
       current_song_name = 'Now Playing:' + song_selector.options[song_selector.selectedIndex].text;
       current_song_bpm = bpms[current_song];
     }
 
     function startVisualizer() {
-      const audioCtx = new AudioContext();
+      const audioCtx = new AudioContext({sampleRate: 16000});
       const ctx = audioVis.getContext('2d')!;
 
       const fftSize = 1024;
+      const bands = 32;
+      const bins_per = (fftSize/2-128)/bands;
 
       const analyser = audioCtx.createAnalyser();
       const source = audioCtx.createMediaElementSource(music_player);
@@ -70,9 +79,16 @@
       let prev_bands = Array(32).fill(0);
 
       function render() {
-        const beat = (music_player.currentTime * current_song_bpm / 60) % 1;
-        const v = music_player.currentTime === 0 ? 0 : Math.pow(1-beat,2)*0.4
         ctx.clearRect(0, 0, audioVis.width, audioVis.height);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        let sum = 0;
+        for (let i = 0; i < bands; i++) {
+          sum += dataArray[i*bins_per]/255;
+        }
+        sum /= bands;
+        const v = Math.pow(sum, 2);
         ctx.fillStyle = 'white'
         ctx.globalAlpha = v;
         ctx.fillRect(0, 0, audioVis.width, audioVis.height);
@@ -96,10 +112,6 @@
           }
           ctx.stroke();
         } else {
-          analyser.getByteFrequencyData(dataArray);
-          
-          const bands = 32;
-          const bins_per = (dataArray.length-128)/bands;
           let current_bands = [];
 
           ctx.fillStyle = 'white';
@@ -127,7 +139,17 @@
 </script>
 
 <div id="music-player">
-  <audio id='player' controls src="fs1.mp3" bind:this={music_player} on:play={startVisualizer}></audio>
+  <button id="play-button" on:click={() => {if(music_player.paused) {music_player.play(); progress_bar_paused = false} else {music_player.pause(); progress_bar_paused = true}}}>
+    <img src={progress_bar_paused ? 'music/play_button.png' : 'music/pause_button.png'} alt='play'/>
+  </button>
+  <div id="fake-player" style="--play-position: {current_time/song_duration*100}%">
+    <div id="progress-bar" class:paused={progress_bar_paused}></div>
+    <input id="play-slider" type="range" min=0 max={song_duration} bind:value={current_time}/>
+    <div id="playhead-range">
+      <img src="music/nyan.png" id="playhead" alt="nyan"/>
+    </div>
+  </div>
+  <audio id='player' controls src="fs1.mp3" bind:this={music_player} on:play={startVisualizer} bind:currentTime={current_time} bind:duration={song_duration}></audio>
   <select id="song-selector" bind:value={current_song} on:change={change_song} bind:this={song_selector}>
     <optgroup label="Sick Tunez">
       <option value="1">Macintosh Plus - ブート</option>
@@ -146,6 +168,7 @@
       <option value="14">leroy - lil mama vip tickets</option>
       <option value="15">leroy - ricky bobby</option>
       <option value="16">leroy - the joke is on you</option>
+      <option value="17">Vylet Pony - ANTONYMPH (N1GHTC0R3 M1X)</option>
     </optgroup>
   </select>
   <canvas id="audio-visualizer" bind:this={audioVis} on:click={() =>{visMode = visMode^1}}></canvas>
@@ -185,6 +208,65 @@
   #audio-visualizer:hover {
     background: #00000050;
   }
+
+  #player {
+    display: none;
+  }
+
+  #play-button {
+    background: #00000050;
+    border: none;
+  }
+
+  #fake-player {
+    width: 10em;
+    height: 2em;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0.5em;
+    background: #00000080;
+    
+    --play-position: 50%;
+  }
+
+  #playhead {
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    width: 2.5em;
+    transform: translate(-6px, 4px);
+    left: calc(var(--play-position) - 12px + 12px);
+  }
+
+  #playhead-range {
+    position: absolute;
+    top: 0;
+    width: calc(100% - 24px);
+  }
+
+  @keyframes rainbow-wave {
+    0% {background-position-x: 0px}
+    50% {background-position-x: 6px}
+    100% {background-position-x: 12px}
+  }
+
+  #progress-bar.paused {
+    animation-play-state: paused;
+  }
+
+  #progress-bar {
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    background-image: url('music/rainbow.png');
+    background-repeat: repeat-x;
+    animation: rainbow-wave 1s infinite linear;
+    width: var(--play-position);
+    transform: translateY(2px);
+    height: 1em;
+  }
+
   @keyframes flash {
     0% {color:   hsla(0, 94%, 100%, 0.87);}
     50% {color:  hsla(0, 94%, 100%, 0.62);}
@@ -200,6 +282,7 @@
     color: hsla(0, 94%, 100%, 0.87);
     animation: flash 5s infinite;
     font-family: Minecraft;
+    height: 100%;
     text-shadow: black 2px 2px;
   }
   .wavy span {
@@ -207,6 +290,9 @@
     position: relative;
     animation: wave 5s infinite;
     animation-delay: calc(-.2s * var(--i));
+  }
+  .wavy span:hover {
+    animation-duration: 2s;
   }
   #music-player {
     display: flex;
@@ -216,5 +302,6 @@
     background-image: url('./backgrounds/waterfall.jpg');
     align-self: flex-start;
     margin: auto auto auto 0;
+    image-rendering: pixelated;
   }
 </style>

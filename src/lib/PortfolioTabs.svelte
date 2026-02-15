@@ -40,59 +40,63 @@
     function initCanvases() {
         c = new PortfolioButtonCanvas(canvasElement, 30, 30);
 
-        c.compileProgram(canvasManager.programs['polyhedra'].vertex, canvasManager.programs['polyhedra'].fragment);
-        c.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c.addUniform('iTime', UniformType.Float, 1);
-        c.uniformData('iTime', 0);
-        c.addUniform('iChannel0', UniformType.Texture2D, 1);
+        c.compileProgram('polyhedra', canvasManager.programs['polyhedra'].vertex, canvasManager.programs['polyhedra'].fragment);
+        c.addAttribute('vertexPosition',  'polyhedra', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c.attributeData('vertexPosition', 'polyhedra', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c.addAttribute('vertexColor',     'polyhedra', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c.attributeData('vertexColor',    'polyhedra', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c.addUniform('iTime',     'polyhedra', UniformType.Float, 1);
+        c.uniformData('iTime',    'polyhedra', 0);
+        c.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 1);
 
-        c.addUniform('shape_num', UniformType.Integer, 1);
-        c.uniformData('shape_num', 0);
-        c.addUniform('rot_factor', UniformType.Float, 1);
-        c.uniformData('rot_factor', 0);
+        c.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1);
+        c.uniformData('shape_num',  'polyhedra', 0);
+        c.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1);
+        c.uniformData('rot_factor', 'polyhedra', 0);
 
         c2 = new PortfolioButtonCanvas(canvasElement2, 30, 30);
 
-        c2.compileProgram(canvasManager.programs['polyhedra'].vertex, canvasManager.programs['polyhedra'].fragment);
-        c2.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c2.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c2.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c2.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c2.addUniform('iTime', UniformType.Float, 1);
-        c2.uniformData('iTime', 0);
-        c2.addUniform('iChannel0', UniformType.Texture2D, 1);
+        c2.compileProgram('polyhedra', canvasManager.programs['polyhedra'].vertex, canvasManager.programs['polyhedra'].fragment);
+        c2.addAttribute('vertexPosition',  'polyhedra', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c2.attributeData('vertexPosition', 'polyhedra', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c2.addAttribute('vertexColor',     'polyhedra', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c2.attributeData('vertexColor',    'polyhedra', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c2.addUniform('iTime',     'polyhedra', UniformType.Float, 1);
+        c2.uniformData('iTime',    'polyhedra', 0);
+        c2.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 1);
 
-        c2.addUniform('shape_num', UniformType.Integer, 1);
-        c2.uniformData('shape_num', 1);
-        c2.addUniform('rot_factor', UniformType.Float, 1);
-        c2.uniformData('rot_factor', 0.5);
+        c2.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1);
+        c2.uniformData('shape_num',  'polyhedra', 1);
+        c2.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1);
+        c2.uniformData('rot_factor', 'polyhedra', 0.5);
 
         c3 = new PortfolioButtonCanvas(canvasElement3, 30, 30);
 
-        c3.compileProgram(canvasManager.programs['polyhedra'].vertex, canvasManager.programs['polyhedra'].fragment);
-        c3.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c3.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c3.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c3.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c3.addUniform('iTime', UniformType.Float, 1);
-        c3.uniformData('iTime', 0);
-        c3.addUniform('iChannel0', UniformType.Texture2D, 1);
+        c3.compileProgram('polyhedra', canvasManager.programs['polyhedra'].vertex, canvasManager.programs['polyhedra'].fragment);
+        c3.addAttribute('vertexPosition',  'polyhedra', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c3.attributeData('vertexPosition', 'polyhedra', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c3.addAttribute('vertexColor',     'polyhedra', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c3.attributeData('vertexColor',    'polyhedra', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c3.addUniform('iTime',     'polyhedra', UniformType.Float, 1);
+        c3.uniformData('iTime',    'polyhedra', 0);
+        c3.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 1);
 
-        c3.addUniform('shape_num', UniformType.Integer, 1);
-        c3.uniformData('shape_num', 2);
-        c3.addUniform('rot_factor', UniformType.Float, 1);
-        c3.uniformData('rot_factor', 1);
+        c3.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1);
+        c3.uniformData('shape_num',  'polyhedra', 2);
+        c3.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1);
+        c3.uniformData('rot_factor', 'polyhedra', 1);
     }
 
     onMount(() => {
         initCanvases();
 
-        c.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
-        c2.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
-        c3.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
+        c.uniformData('iChannel0',  'polyhedra', 0, canvasManager.assets['bayer']);
+        c2.uniformData('iChannel0', 'polyhedra', 0, canvasManager.assets['bayer']);
+        c3.uniformData('iChannel0', 'polyhedra', 0, canvasManager.assets['bayer']);
+
+        c.addDrawCall('polyhedra', 6, 0, 0);
+        c2.addDrawCall('polyhedra', 6, 0, 0);
+        c3.addDrawCall('polyhedra', 6, 0, 0);
 
         requestAnimationFrame(renderTick);
     });

@@ -18,70 +18,68 @@
 
     onMount(() => {
         c = new ShaderDisplayCanvas(canvasElement, 200, 200);
-
-        c.compileProgram(canvasManager.programs['snowflake'].vertex, canvasManager.programs['snowflake'].fragment);
-        c.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c.addUniform('iTime', UniformType.Float, 1);
-        c.uniformData('iTime', 0);
-        c.addUniform('iChannel0', UniformType.Texture2D, 1);
-        c.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
-
-        c.render();
-
         c2 = new ShaderDisplayCanvas(canvasElement2, 300, 300);
-
-        c2.compileProgram(canvasManager.programs['donut'].vertex, canvasManager.programs['donut'].fragment);
-        c2.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c2.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c2.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c2.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c2.addUniform('iTime', UniformType.Float, 1);
-        c2.uniformData('iTime', 0);
-        c2.addUniform('iChannel0', UniformType.Texture2D, 1);
-        c2.addUniform('iChannel1', UniformType.Texture2D, 1);
-
-        c2.uniformData('iChannel0', 0, canvasManager.assets['bayer']);
-        c2.uniformData('iChannel1', 1, canvasManager.assets['times_ascii']);
-
-        c2.render();
-
         c3 = new ShaderDisplayCanvas(canvasElement3, 300, 300);
-
-        c3.compileProgram(canvasManager.programs['metaballs'].vertex, canvasManager.programs['metaballs'].fragment);
-        c3.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c3.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c3.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c3.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c3.addUniform('iTime', UniformType.Float, 1);
-        c3.uniformData('iTime', 0);
-
-        c3.render();
-
         c4 = new ShaderDisplayCanvas(canvasElement4, 200, 200);
-
-        c4.compileProgram(canvasManager.programs['mandelbrot'].vertex, canvasManager.programs['mandelbrot'].fragment);
-        c4.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c4.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c4.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c4.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c4.addUniform('iTime', UniformType.Float, 1);
-        c4.uniformData('iTime', 0);
-
-        c4.render();
-
         c5 = new ShaderDisplayCanvas(canvasElement5, 300, 300);
 
-        c5.compileProgram(canvasManager.programs['julia'].vertex, canvasManager.programs['julia'].fragment);
-        c5.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c5.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c5.addAttribute('vertexColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c5.attributeData('vertexColor', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c5.addUniform('iTime', UniformType.Float, 1);
-        c5.uniformData('iTime', 0);
+        c.compileProgram('shader-display', canvasManager.programs['snowflake'].vertex, canvasManager.programs['snowflake'].fragment);
+        c.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c.attributeData('vertexPosition', 'shader-display', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c.addAttribute('vertexColor',     'shader-display', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c.attributeData('vertexColor',    'shader-display', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c.addUniform('iTime',  'shader-display', UniformType.Float, 1);
+        c.uniformData('iTime', 'shader-display', 0);
+        c.addUniform('iChannel0',  'shader-display', UniformType.Texture2D, 1);
+        c.uniformData('iChannel0', 'shader-display', 0, canvasManager.assets['bayer']);
 
+        c2.compileProgram('shader-display', canvasManager.programs['donut'].vertex, canvasManager.programs['donut'].fragment);
+        c2.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c2.attributeData('vertexPosition', 'shader-display', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c2.addAttribute('vertexColor',     'shader-display', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c2.attributeData('vertexColor',    'shader-display', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c2.addUniform('iTime',  'shader-display', UniformType.Float, 1);
+        c2.uniformData('iTime', 'shader-display', 0);
+        c2.addUniform('iChannel0', 'shader-display', UniformType.Texture2D, 1);
+        c2.addUniform('iChannel1', 'shader-display', UniformType.Texture2D, 1);
+
+        c2.uniformData('iChannel0', 'shader-display', 0, canvasManager.assets['bayer']);
+        c2.uniformData('iChannel1', 'shader-display', 1, canvasManager.assets['ascii']);
+
+        c3.compileProgram('shader-display', canvasManager.programs['metaballs'].vertex, canvasManager.programs['metaballs'].fragment);
+        c3.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c3.attributeData('vertexPosition', 'shader-display', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c3.addAttribute('vertexColor',     'shader-display', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c3.attributeData('vertexColor',    'shader-display', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c3.addUniform('iTime',  'shader-display', UniformType.Float, 1);
+        c3.uniformData('iTime', 'shader-display', 0);
+
+        c4.compileProgram('shader-display', canvasManager.programs['mandelbrot'].vertex, canvasManager.programs['mandelbrot'].fragment);
+        c4.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c4.attributeData('vertexPosition', 'shader-display', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c4.addAttribute('vertexColor',     'shader-display', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c4.attributeData('vertexColor',    'shader-display', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c4.addUniform('iTime',  'shader-display', UniformType.Float, 1);
+        c4.uniformData('iTime', 'shader-display', 0);
+
+        c5.compileProgram('shader-display', canvasManager.programs['julia'].vertex, canvasManager.programs['julia'].fragment);
+        c5.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c5.attributeData('vertexPosition', 'shader-display', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c5.addAttribute('vertexColor',     'shader-display', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c5.attributeData('vertexColor',    'shader-display', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
+        c5.addUniform('iTime',  'shader-display', UniformType.Float, 1);
+        c5.uniformData('iTime', 'shader-display', 0);
+
+        c.addDrawCall('shader-display', 6, 0, 0);
+        c2.addDrawCall('shader-display', 6, 0, 0);
+        c3.addDrawCall('shader-display', 6, 0, 0);
+        c4.addDrawCall('shader-display', 6, 0, 0);
+        c5.addDrawCall('shader-display', 6, 0, 0);
+
+        c.render();
+        c2.render();
+        c3.render();
+        c4.render();
         c5.render();
 
         renderTick();

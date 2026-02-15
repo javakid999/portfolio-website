@@ -12,21 +12,14 @@
     let c: ParticleSimCanvas;
     let rect = [0,0,0,0]
     onMount(() => {
-        const starPositions: number[] = [5, 0, 10, -1, 13, 0, 16, 2, 17, 6, 22, 5, 23, 1];
-        const starElements = document.getElementsByClassName('star-deco');
-        const stars: HTMLImageElement[] = [].slice.call(starElements);
-        stars.forEach((star, i) => {
-            star.style.transform = `translate(${starPositions[i*2]}em, ${starPositions[i*2+1]}em)`
-        });
-
         c = new ParticleSimCanvas(canvasElement, 250, 250);
 
-        c.compileProgram(canvasManager.programs['circle'].vertex, canvasManager.programs['circle'].fragment);
-        c.addAttribute('vertexPosition', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
-        c.attributeData('vertexPosition', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
-        c.addAttribute('vertexColor', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
-        c.attributeData('vertexColor', new Float32Array([0,0, 1,1, 0,1, 0,0, 1,0, 1,1]));
-        c.addAttribute('circleColor', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c.compileProgram('particle-sim', canvasManager.programs['circle'].vertex, canvasManager.programs['circle'].fragment);
+        c.addAttribute('vertexPosition',  'particle-sim', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
+        c.attributeData('vertexPosition', 'particle-sim', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
+        c.addAttribute('vertexColor',     'particle-sim', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
+        c.attributeData('vertexColor',    'particle-sim', new Float32Array([0,0, 1,1, 0,1, 0,0, 1,0, 1,1]));
+        c.addAttribute('circleColor',     'particle-sim', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
 
         renderTick();
     })
@@ -52,57 +45,50 @@
     }
 </script>
 
-<div id="main">
-    <div id="viewport-wrapper" bind:clientWidth={viewportWidth} bind:clientHeight={viewportHeight}>
-        <div id="header">
-            <h1><u>About Me</u></h1>
-            <img id="horizontal-bar" src="./water_bar.gif" alt="bar" />
-        </div>
-        <p>
-            Hello! Welcome to my about page. <br/><br/>
-            When I was 10 years old, I read the book "Javascript for Kids" by Nick Morgan, and have been obsessed with programming ever since. <br/>
-            I created this website as a place to host my many projects I've worked on whilst learning Computer Science.<br/>
-            Over the years I've also been interested in 3D modeling and music production, and you'll find those projects on this website too.<br/>
-            I'm currently 18, and a freshman studying Copmuter Science at UMass Amherst.<br/>
-            If you'd like to reach out, business-related or otherwise, feel free to reach out to my email, <span class="yellow">charlescall@umass.edu</span>.<br/><br/>
-            Site last updated: November 4th, 2024
-        </p>
-        <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"water.exe"} id={3}>
-            <div id="canvas-wrapper" role="button" tabindex=0>
-                <canvas bind:this={canvasElement} />
-            </div>
-        </Dragwindow>
-        <span id="stamps">
-            <img src="./src/assets/large blinkies/vaporwave.png" alt="vaporwave" style="width:88px;height:31px;"/>
-            <img src="./src/assets/large blinkies/88x31nocookie.gif" alt="cookies"/>
-            <img src="./src/assets/large blinkies/88x31neocities.gif" alt="neocities"/>
-            <img src="./src/assets/large blinkies/88x31computer.gif" alt="computer"/>
-        </span>
-        <div id="pika">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-            <img src="./src/assets/pikachu.gif" alt="pika" style="width: 400px;" on:click={createPikachu}/>
-        </div>
-        <span id="pikachu-virus" bind:this={pikaVirus}></span>
+<div id="viewport-wrapper" bind:clientWidth={viewportWidth} bind:clientHeight={viewportHeight}>
+    <div id="header">
+        <h1><u>About Me</u></h1>
+        <img id="horizontal-bar" src="./water_bar.gif" alt="bar" />
     </div>
+    <p>
+        Hello! Welcome to my about page. <br/><br/>
+        When I was 10 years old, I read the book "Javascript for Kids" by Nick Morgan, and have been obsessed with programming ever since. <br/>
+        I created this website as a place to host my many projects I've worked on whilst learning Computer Science.<br/>
+        Over the years I've also been interested in 3D modeling and music production, and you'll find those projects on this website too.<br/>
+        I'm currently 18, and a freshman studying Copmuter Science at UMass Amherst.<br/>
+        If you'd like to reach out, business-related or otherwise, feel free to reach out to my email, <span class="yellow">charliecall@umass.edu</span>.<br/><br/>
+        Site last updated: January 5th, 2026
+    </p>
+    <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"water.exe"} id={3}>
+        <div id="canvas-wrapper" role="button" tabindex=0>
+            <canvas bind:this={canvasElement} />
+        </div>
+    </Dragwindow>
+    <span id="stamps">
+        <img src="./src/assets/large blinkies/vaporwave.png" alt="vaporwave" style="width:88px;height:31px;"/>
+        <img src="./src/assets/large blinkies/88x31nocookie.gif" alt="cookies"/>
+        <img src="./src/assets/large blinkies/88x31neocities.gif" alt="neocities"/>
+        <img src="./src/assets/large blinkies/88x31computer.gif" alt="computer"/>
+    </span>
+    <div id="pika">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <img src="./src/assets/pikachu.gif" alt="pika" style="width: 400px;" on:click={createPikachu}/>
+    </div>
+    <span id="pikachu-virus" bind:this={pikaVirus}></span>
 </div>
 
 <style>
-    #main {
-        background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('./backgrounds/bubbles2.jpg');
-        background-size: 30vw;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        overflow-y: auto;
-    }
     #horizontal-bar {
         height: 0.5em;
         width: 50vw;
         object-fit: cover;
     }
     #viewport-wrapper {
-        height: 100%;
+        background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('./backgrounds/bubbles2.jpg');
+        background-size: 30vw;
+        text-align: center;
+        height: 100svh;
         overflow:hidden;
         display: flex;
         flex-direction: column;

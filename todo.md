@@ -4,16 +4,18 @@
 - About page
 - Home page
 - Music player
+- Issues with fullscreening
+- Compress audio files
+- 3D Art Page
 
 ### Necessary features for launch
 - Portfolio Games
 - Portfolio Misc
-- 3D Art Page
 - Music Page
 - Atlas
 - Cleanup bugs
-    - Issues with fullscreening
     - Windows spawn below screen
+    - Get bpm and compress m4a file
 
 
 ### Features I want in the future

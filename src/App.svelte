@@ -1,6 +1,8 @@
 <script lang="ts">
     import About from "./lib/About.svelte";
+    import Atlas from "./lib/Atlas.svelte";
     import Blender from "./lib/Blender.svelte";
+    import Blog from "./lib/Blog.svelte";
     import MusicPlayer from "./lib/home-screen/MusicPlayer.svelte";
     import Navbar from "./lib/home-screen/Navbar.svelte";
     import Home from "./lib/Home.svelte";
@@ -24,6 +26,12 @@
         }
         if (event.detail.page == 'blender') {
             page = Blender;
+        }
+        if (event.detail.page == 'blog') {
+            page = Blog;
+        }
+        if (event.detail.page == 'atlas') {
+            page = Atlas;
         }
     }
 </script>
@@ -54,7 +62,8 @@
     flex-direction: column;
   }
   #main-window {
-    max-height: 75vh;
+    text-align: center;
+    overflow-y: auto;
   }
   #nav-deco-bottom {
     margin-top: auto;

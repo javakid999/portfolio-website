@@ -7,10 +7,26 @@
         {"name": "metaballs", "link_v": "./src/assets/shaders/metaballs/vertex.glsl", "link_f": "./src/assets/shaders/metaballs/fragment.glsl"},
         {"name": "mandelbrot", "link_v": "./src/assets/shaders/mandelbrot/vertex.glsl", "link_f": "./src/assets/shaders/mandelbrot/fragment.glsl"},
         {"name": "julia", "link_v": "./src/assets/shaders/julia/vertex.glsl", "link_f": "./src/assets/shaders/julia/fragment.glsl"},
-        {"name": "circle", "link_v": "./src/assets/shaders/circle/vertex.glsl", "link_f": "./src/assets/shaders/circle/fragment.glsl"}
+        {"name": "circle", "link_v": "./src/assets/shaders/circle/vertex.glsl", "link_f": "./src/assets/shaders/circle/fragment.glsl"},
+        {"name": "skybox", "link_v": "./src/assets/shaders/skybox/vertex.glsl", "link_f": "./src/assets/shaders/skybox/fragment.glsl"},
+        {"name": "3d-test", "link_v": "./src/assets/shaders/3d-test/vertex.glsl", "link_f": "./src/assets/shaders/3d-test/fragment.glsl"},
+        {"name": "3d-test-pick", "link_v": "./src/assets/shaders/3d-test/vertex.glsl", "link_f": "./src/assets/shaders/3d-test/pick-fragment.glsl"},
+        {"name": "atlas-title", "link_v": "./src/assets/shaders/atlas-title/vertex.glsl", "link_f": "./src/assets/shaders/atlas-title/fragment.glsl"}
     ],
     "images": [
         {"name": "bayer", "link": "./src/assets/bayer8.png"},
-        {"name": "times_ascii", "link": "./src/assets/times_ascii.png"}
+        {"name": "times_ascii", "link": "./src/assets/times_ascii.png"},
+        {"name": "ascii", "link": "./src/assets/ascii.png"},
+        {"name": "atlas_title", "link": "./src/assets/atlas_title.png"}
+    ],
+    "skyboxes": [
+        {"name": "space", "links": [
+            "./src/assets/skyboxes/space/nx.png",
+            "./src/assets/skyboxes/space/ny.png",
+            "./src/assets/skyboxes/space/nz.png",
+            "./src/assets/skyboxes/space/px.png",
+            "./src/assets/skyboxes/space/py.png",
+            "./src/assets/skyboxes/space/pz.png"
+        ]}
     ]
 }
