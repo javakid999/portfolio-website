@@ -4,7 +4,7 @@ import { CanvasManager } from './lib/canvasManager';
 import { LoadImage, LoadProgram, LoadSkybox, type ProgramSrc } from './util/load';
 
 (async () => {
-      let manifest = await fetch('./src/assets/assets.json').then((x) => x.json());
+      let manifest = await fetch('assets/assets.json').then((x) => x.json());
       let imageArr = await Promise.all(manifest.images.map(
         ({name, link}: {[index: string]: string}): any => LoadImage(name, link)
       ));
