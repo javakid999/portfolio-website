@@ -184,7 +184,7 @@
 <style>
   @font-face {
     font-family: Minecraft;
-    src: url(./fonts/Minecraft.ttf)
+    src: url(/fonts/Minecraft.ttf)
   }
   #song-selector {
     color: #ffffff00;
