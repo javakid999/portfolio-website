@@ -56,6 +56,7 @@
       music_player.src = song_url_lookup[current_song];
       current_song_name = 'Now Playing:' + song_selector.options[song_selector.selectedIndex].text;
       current_song_bpm = bpms[current_song];
+      progress_bar_paused = true;
     }
 
     function startVisualizer() {

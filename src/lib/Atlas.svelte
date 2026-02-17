@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { AtlasCanvas } from "./canvas";
     import type { CanvasManager } from "./canvasManager";
 
@@ -9,16 +9,22 @@
 
     let mouse_state = false;
     let mouse_pos: [number, number] = [0,0]
+    let destroyed = false;
 
     onMount(() => {
         const c = new AtlasCanvas(canvasElement, viewportWidth, viewportHeight, canvasManager);
 
         let update = () => {
+            if (destroyed) return;
             c.update(mouse_state, mouse_pos);
             requestAnimationFrame(update);
         }
 
         update();
+    })
+
+    onDestroy(() => {
+        destroyed = true;
     })
 </script>
 

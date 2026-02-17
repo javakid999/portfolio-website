@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { ShaderDisplayCanvas, UniformType } from "./canvas";
 
     export let canvasManager;
@@ -15,6 +15,8 @@
     let c3: ShaderDisplayCanvas;
     let c4: ShaderDisplayCanvas;
     let c5: ShaderDisplayCanvas;
+
+    let destroyed = false;
 
     onMount(() => {
         c = new ShaderDisplayCanvas(canvasElement, 200, 200);
@@ -85,7 +87,12 @@
         renderTick();
     });
 
+    onDestroy(() => {
+        destroyed = true;
+    })
+
     function renderTick() {
+        if (destroyed) return;
         c.update();
         c2.update();
         c3.update();

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import Dragwindow from "./Dragwindow.svelte";
     import { ParticleSimCanvas } from "./canvas";
     import type { CanvasManager } from "./canvasManager";
@@ -11,6 +11,9 @@
     let canvasElement: HTMLCanvasElement;
     let c: ParticleSimCanvas;
     let rect = [0,0,0,0]
+
+    let destroyed = false;
+
     onMount(() => {
         c = new ParticleSimCanvas(canvasElement, 250, 250);
 
@@ -24,7 +27,12 @@
         renderTick();
     })
 
+    onDestroy(() => {
+        destroyed = true;
+    })
+
     function renderTick() {
+        if (destroyed) return;
         rect[2] = rect[0]
         rect[3] = rect[1]
         let newRect = canvasElement.getBoundingClientRect();

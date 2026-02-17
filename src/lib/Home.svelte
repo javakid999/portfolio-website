@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import Dragwindow from "./Dragwindow.svelte";
     import { ShaderDisplayCanvas, UniformType } from "./canvas";
     import type { CanvasManager } from "./canvasManager";
@@ -11,8 +11,10 @@
     let canvasElement2: HTMLCanvasElement;
     let c: ShaderDisplayCanvas;
     let c2: ShaderDisplayCanvas;
-    let isRunning = false;
     let time = 0;
+
+    let destroyed = false;
+
     onMount(() => {
         const starPositions: number[] = [5, 0, 10, -1, 13, 0, 16, 2, 17, 6, 22, 5, 23, 1];
         const starElements = document.getElementsByClassName('star-deco');
@@ -57,7 +59,12 @@
         renderTick();
     })
 
+    onDestroy(() => {
+        destroyed = true;
+    })
+
     function renderTick() {
+        if (destroyed) return;
         c.update();
         c2.update();
         requestAnimationFrame(renderTick);
@@ -78,7 +85,7 @@
             <span class="wave" style="--i:2">o</span>
             <span class="wave" style="--i:3">v</span>
             <span class="wave" style="--i:4">e</span>
-        </span>when you click on them, and can be dragged around!<br/>
+        </span>when you hover over them, and can be dragged around!<br/>
         But <span class="red">beware</span>! There may be more to this site than meets the eye!<br/>
         Thank you for reading traveller, and happy surfing ;-)<br/>
         <span class="yellow">This website is best experienced in fullscreen!</span>

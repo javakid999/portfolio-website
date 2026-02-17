@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { PortfolioButtonCanvas, UniformType } from "./canvas";
     import type { CanvasManager } from "./canvasManager";
     import Dragwindow from "./Dragwindow.svelte";
@@ -11,6 +11,8 @@
     export let viewportWidth;
     export let viewportHeight;
     export let canvasManager: CanvasManager;
+
+    let destroyed = false;
 
     function changeTab(element: HTMLDivElement, id: number) {
         switch(id) {
@@ -101,7 +103,12 @@
         requestAnimationFrame(renderTick);
     });
 
+    onDestroy(() => {
+        destroyed = true;
+    })
+
     function renderTick() {
+        if (destroyed) return;
         c.update()
         c2.update()
         c3.update()
