@@ -11,13 +11,15 @@
         {"name": "skybox",       "link_v": "assets/shaders/skybox/vertex.glsl",      "link_f": "assets/shaders/skybox/fragment.glsl"},
         {"name": "3d-test",      "link_v": "assets/shaders/3d-test/vertex.glsl",     "link_f": "assets/shaders/3d-test/fragment.glsl"},
         {"name": "3d-test-pick", "link_v": "assets/shaders/3d-test/vertex.glsl",     "link_f": "assets/shaders/3d-test/pick-fragment.glsl"},
-        {"name": "atlas-title",  "link_v": "assets/shaders/atlas-title/vertex.glsl", "link_f": "assets/shaders/atlas-title/fragment.glsl"}
+        {"name": "atlas-title",  "link_v": "assets/shaders/atlas-title/vertex.glsl", "link_f": "assets/shaders/atlas-title/fragment.glsl"},
+        {"name": "atlas-text",  "link_v": "assets/shaders/atlas-text/vertex.glsl", "link_f": "assets/shaders/atlas-text/fragment.glsl"}
     ],
     "images": [
-        {"name": "bayer",       "link": "assets/bayer8.png"},
-        {"name": "times_ascii", "link": "assets/times_ascii.png"},
-        {"name": "ascii",       "link": "assets/ascii.png"},
-        {"name": "atlas_title", "link": "assets/atlas_title.png"}
+        {"name": "bayer",             "link": "assets/bayer8.png"},
+        {"name": "times_ascii",       "link": "assets/times_ascii.png"},
+        {"name": "ascii",             "link": "assets/ascii.png"},
+        {"name": "atlas_title",       "link": "assets/atlas_title.png"},
+        {"name": "character_tilemap", "link": "assets/character_tilemap.png"}
     ],
     "skyboxes": [
         {"name": "space", "links": [

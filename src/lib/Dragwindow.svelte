@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterUpdate, onMount } from "svelte";
+  import { onMount } from "svelte";
   export let ParentWidth: number, ParentHeight: number;
   export let Title;
   export let id: number;
@@ -7,10 +7,12 @@
     onMount(() => {
         dragElement(document.getElementById(`window-${id}`)!);
         const elmnt = document.getElementById(`window-${id}`)!;
-        elmnt.style.left = (Math.random() * 100).toString() + '%';
-        elmnt.style.top = (Math.random() * 100).toString() + '%';
+        elmnt.style.left = (Math.random() * (ParentWidth - elmnt.clientWidth)).toString() + 'px';
+        elmnt.style.top = (Math.random() * (ParentHeight*0.7 - elmnt.clientHeight)).toString() + 'px';
     });
     
+    let visibility = 'visible';
+
     function dragElement(elmnt: HTMLElement) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     document.getElementById(`window-${id}header`)!.onmousedown = dragMouseDown;
@@ -63,7 +65,9 @@
                 <p>{Title}</p>
             </span>
             <span id="window-buttons">
-                <span id="minimize" class="window-button">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <span id="minimize" class="window-button" on:click={()=>{if (visibility === 'visible') {visibility = 'hidden'} else {visibility = 'visible'}}}>
                 <img src="./icons/down.png" style="image-rendering: pixelated; width: 1.5em; height: 1.5em;" alt="minimize" />
                 </span>
                 <span id="fullscreen" class="window-button">
@@ -72,7 +76,9 @@
             </span>
         </div>
     </div>
-    <slot></slot>
+    <div id="window-content" style="visibility:{visibility}; {visibility === 'hidden' ? 'height: 0px;' : ''}">
+        <slot></slot>
+    </div>
 </div>
 
 <style>
@@ -86,6 +92,9 @@
     .dragwindowheader {
         cursor: move;
         z-index: 10;
+    }
+    #minimize {
+        cursor: ns-resize;
     }
     #nav-deco-top {
         background: rgb(0,27,130);

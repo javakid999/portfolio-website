@@ -53,15 +53,65 @@ export function generateIcosphere(): [Float32Array, Float32Array, number[][]] {
         b_1 = b_1.map(x => x / b_1_len);
         b_2 = b_2.map(x => x / b_2_len);
 
+        const size = 0.3
+
         const tri: number[][] = [
-            [point[0]+(b_1[0]+b_2[0])*0.2,  point[1]+(b_1[1]+b_2[1])*0.2,  point[2]+(b_1[2]+b_2[2])*0.2],
-            [point[0]+(-b_1[0]+b_2[0])*0.2, point[1]+(-b_1[1]+b_2[1])*0.2, point[2]+(-b_1[2]+b_2[2])*0.2],
-            [point[0]+(b_1[0]-b_2[0])*0.2,  point[1]+(b_1[1]-b_2[1])*0.2,  point[2]+(b_1[2]-b_2[2])*0.2],
-            [point[0]+(-b_1[0]-b_2[0])*0.2, point[1]+(-b_1[1]-b_2[1])*0.2, point[2]+(-b_1[2]-b_2[2])*0.2],
+            [point[0] + ( b_1[0] + b_2[0]) * size, point[1] + ( b_1[1] + b_2[1]) * size, point[2] + ( b_1[2] + b_2[2]) * size],
+            [point[0] + (-b_1[0] + b_2[0]) * size, point[1] + (-b_1[1] + b_2[1]) * size, point[2] + (-b_1[2] + b_2[2]) * size],
+            [point[0] + ( b_1[0] - b_2[0]) * size, point[1] + ( b_1[1] - b_2[1]) * size, point[2] + ( b_1[2] - b_2[2]) * size],
+            [point[0] + (-b_1[0] - b_2[0]) * size, point[1] + (-b_1[1] - b_2[1]) * size, point[2] + (-b_1[2] - b_2[2]) * size],
         ]
         vertex_pos.push(...tri[0], ...tri[1], ...tri[3], ...tri[0], ...tri[3], ...tri[2])
         vertex_color.push(...[1,1,0], ...[0,1,0], ...[0,0,0], ...[1,1,0], ...[0,0,0], ...[1,0,0])
     }
 
     return [new Float32Array(vertex_pos), new Float32Array(vertex_color), points];
+}
+
+export function generate_title(point: number[]): [Float32Array, Float32Array] {
+    const vertex_pos: number[]   = [];
+    const vertex_color: number[] = [];
+
+    let b_1: number[];
+    let b_2: number[];
+    const size = [-1, -1]
+
+    if (point[0] == 0) {
+        b_1 = [1, 0, 0];
+        b_2 = [0, -point[2], point[1]];
+
+        size[0] = 1
+        size[1] = -1/16
+        vertex_color.push(...[1,1,0], ...[0,1,0], ...[0,0,0], ...[1,1,0], ...[0,0,0], ...[1,0,0])
+    } else if (point[1] == 0) {
+        b_1 = [0, 1, 0];
+        b_2 = [-point[2], 0, point[0]];
+
+        size[0] = 1/16
+        size[1] = -1
+        vertex_color.push(...[1,1,0], ...[1,0,0], ...[0,0,0], ...[1,1,0], ...[0,0,0], ...[0,1,0])
+    } else {
+        b_1 = [0, 0, 1];
+        b_2 = [-point[1], point[0], 0];
+
+        size[0] = -1
+        size[1] = 1/16
+        vertex_color.push(...[1,1,0], ...[0,1,0], ...[0,0,0], ...[1,1,0], ...[0,0,0], ...[1,0,0])
+    }
+
+    let b_1_len = Math.hypot(...b_1)
+    let b_2_len = Math.hypot(...b_2)
+    b_1 = b_1.map(x => x / b_1_len * size[0]);
+    b_2 = b_2.map(x => x / b_2_len * size[1]);
+
+    const tri: number[][] = [
+        [point[0]+( b_1[0]+b_2[0]), point[1]+( b_1[1]+b_2[1]), point[2]+( b_1[2]+b_2[2])],
+        [point[0]+(-b_1[0]+b_2[0]), point[1]+(-b_1[1]+b_2[1]), point[2]+(-b_1[2]+b_2[2])],
+        [point[0]+( b_1[0]-b_2[0]), point[1]+( b_1[1]-b_2[1]), point[2]+( b_1[2]-b_2[2])],
+        [point[0]+(-b_1[0]-b_2[0]), point[1]+(-b_1[1]-b_2[1]), point[2]+(-b_1[2]-b_2[2])],
+    ]
+
+    vertex_pos.push(...tri[0], ...tri[1], ...tri[3], ...tri[0], ...tri[3], ...tri[2])
+
+    return [new Float32Array(vertex_pos), new Float32Array(vertex_color)]
 }

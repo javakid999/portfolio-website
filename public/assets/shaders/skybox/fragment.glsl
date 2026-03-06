@@ -65,14 +65,16 @@ vec2 rotate(vec2 uv, float theta, float scale) {
 void main() {
     vec4 uv = position;
 
-    vec4 t = inverse(proj * view) * uv;
+    mat4 inv = inverse(proj * view);
+    vec4 t = inv * uv;
     float v = genNoise(5.0*normalize(-t.xyz/t.w) + time/2.0);
 
     v = floor(v*7.0)/7.0;
     v *= 100.0;
     uv = (v < 45.0) ? uv : floor(uv*v)/v;
-    t = inverse(proj * view) * uv;
+    t = inv * uv;
 
     vec4 sky = texture(skybox, normalize(-t.xyz / t.w));
+    sky.xyz = vec3(pow(sky.x*1.3, 2.0), pow(sky.y*1.3, 2.0), pow(sky.z*1.3, 2.0));
     fragColor = vec4((v > 45.0) ? floor(sky.x*20.0)/20.0 : sky.x, (v > 45.0) ? floor(sky.y*20.0)/20.0 : sky.y, (v > 45.0) ? floor(sky.z*20.0)/20.0 : sky.z, sky.w);
 }

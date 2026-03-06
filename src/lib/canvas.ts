@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { generateIcosphere } from "./atlas/icophere";
+import { generate_title, generateIcosphere } from "./atlas/icophere";
 import { CanvasManager } from "./canvasManager";
 import { ParticleSimulation } from "./particleSimulation";
 
@@ -10,6 +10,7 @@ export class Canvas {
     global_attributes: {[name: string]: Attribute};
     draw_calls: DrawCall[];
     clear_color: [number, number, number, number] = [0,0,0,1]
+    bound_textures: (WebGLTexture | null)[]
 
     program_vertex_data: {[program: string]: [string, Float32Array]};
 
@@ -23,6 +24,9 @@ export class Canvas {
         this.global_attributes = {};
         this.draw_calls = [];
 
+        const max_texture_units = this.gl.getParameter(this.gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS)
+        this.bound_textures = new Array(max_texture_units).fill(null);
+
         this.initCanvas()
     }
 
@@ -31,6 +35,7 @@ export class Canvas {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.BLEND);
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA)
+
         this.clearCanvas();
     }
 
@@ -138,10 +143,74 @@ export class Canvas {
         //Attribute Data DrawLength: Math.floor((data.length - this.programs[program_name].attributes[name].offset) / this.programs[program_name].attributes[name].size / (this.programs[program_name].attributes[name].stride == 0 ? 1 : this.programs[program_name].attributes[name].stride));
     }
 
-    addUniform(name: string, program_name: string, type: UniformType, length: number) {
+    addUniform(name: string, program_name: string, type: UniformType, length: number, data?: number | Float32Array | Int32Array | mat4) {
         this.gl.useProgram(this.programs[program_name].program)
         const uniformLocation = this.gl.getUniformLocation(this.programs[program_name].program, name)!;
         this.programs[program_name].uniforms[name] = {name: name, location: uniformLocation, type: type, length: length}
+        if (data !== undefined) {
+            this.uniformData(name, program_name, data);
+        }
+    }
+
+    createTexture(type: UniformType, texture_unit: number, texture: HTMLImageElement | HTMLImageElement[], wrap_behaviour?: [number, number], filter?: number) {
+        let gl_texture = null;
+        switch (type) {
+            case UniformType.Texture2D:
+                if (Array.isArray(texture)) {
+                    console.error(`Error: Wrong texture type used for texture in slot ${texture_unit}`);
+                    break;
+                }
+                gl_texture = this.gl.createTexture()!;
+                this.gl.activeTexture(this.gl.TEXTURE0 + length);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, gl_texture);
+                if (this.bound_textures[texture_unit] != null) console.warn(`Warning: Overwriting texture in slot ${texture_unit}`)
+                this.bound_textures[texture_unit] = gl_texture;
+
+                this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, wrap_behaviour ? wrap_behaviour[0] : this.gl.REPEAT);
+                this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, wrap_behaviour ? wrap_behaviour[1] : this.gl.REPEAT);
+                this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, filter ? filter : this.gl.NEAREST);
+                this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, filter ? filter : this.gl.NEAREST);
+
+                this.gl.texImage2D(
+                    this.gl.TEXTURE_2D,
+                    0,
+                    this.gl.RGBA,
+                    this.gl.RGBA,
+                    this.gl.UNSIGNED_BYTE,
+                    texture
+                );
+                break;
+            case UniformType.CubeMap:
+                if (!Array.isArray(texture)) {
+                    console.error(`Error: Wrong texture type used for texture in slot ${texture_unit}`);
+                    break;
+                }
+                gl_texture = this.gl.createTexture()!;
+                this.gl.activeTexture(this.gl.TEXTURE0 + texture_unit);
+                this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, gl_texture);
+
+                this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+                this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+                
+                this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, texture[0]!);
+                this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, texture[1]!);
+                this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, texture[2]!);
+                this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_POSITIVE_X, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, texture[3]!);
+                this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, texture[4]!);
+                this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, texture[5]!);
+                
+                this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
+        }
+    }
+
+    bindTexutres(program_name: string) {
+        for (let uniform_name of Object.keys(this.programs[program_name].uniforms)) {
+            const uniform = this.programs[program_name].uniforms[uniform_name];
+            if (uniform.type == UniformType.Texture2D) {
+                this.gl.activeTexture(this.gl.TEXTURE0 + uniform.length);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, this.bound_textures[uniform.length])
+            }
+        }
     }
 
     getDrawLength(program_name: string) {
@@ -166,7 +235,7 @@ export class Canvas {
         return data;
     }
 
-    addDrawCall(program_name: string, draw_length: number, offset: number, z_layer: number, frame_buffers?: string[], options?: DrawCallOptions, pre_draw?: (c: Canvas) => void) {
+    addDrawCall(program_name: string, draw_length: number, offset: number, z_layer: number, frame_buffers?: string[], options?: DrawCallOptions, pre_draw?: (c: Canvas) => void): DrawCall {
         const draw_call: DrawCall = {
             program: this.programs[program_name],
             drawLength: draw_length,
@@ -178,6 +247,7 @@ export class Canvas {
         };
         this.draw_calls.push(draw_call);
         this.draw_calls.sort((a, b) => a.z_layer- b.z_layer)
+        return draw_call
     }
 
     clearDrawCalls(program_name?: string) {
@@ -188,9 +258,11 @@ export class Canvas {
         }
     }
 
-    uniformData(name: string, program_name: string, data: number | Float32Array | Int32Array | mat4): void;
-    uniformData(name: string, program_name: string, data: number, image: HTMLImageElement | HTMLImageElement[]): void;
-    uniformData(name: string, program_name: string, data: number | Float32Array | Int32Array | mat4, image?: HTMLImageElement | HTMLImageElement[]): void {
+    removeDrawCall(draw_call: DrawCall) {
+        this.draw_calls = this.draw_calls.filter(c => c !== draw_call);
+    }
+
+    uniformData(name: string, program_name: string, data: number | Float32Array | Int32Array | mat4): void {
         this.gl.useProgram(this.programs[program_name].program);
 
         switch(this.programs[program_name].uniforms[name].type) {
@@ -224,40 +296,13 @@ export class Canvas {
                 if (typeof data !== 'number' && typeof data[Symbol.iterator] === 'function') {
                     this.gl.uniformMatrix4fv(this.programs[program_name].uniforms[name].location, false, data);
                 }
+                break;
             case UniformType.Texture2D:
-                if (image != undefined && typeof data === 'number' && !Array.isArray(image)) {
-                    const texture = this.gl.createTexture()!;
-                    this.gl.activeTexture(this.gl.TEXTURE0 + data);
-                    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-
-                    // i need to allow changing the settings here later
-                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.REPEAT);
-                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.REPEAT);
-                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-
-                    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, image.width, image.height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image!);
-                    this.gl.uniform1i(this.programs[program_name].uniforms[name].location, data);
-                }
+                if (typeof data === 'number') this.gl.uniform1i(this.programs[program_name].uniforms[name].location, data);
+                break;
             case UniformType.CubeMap:
-                if (image != undefined && typeof data === 'number' && Array.isArray(image)) {
-                    const texture = this.gl.createTexture()!;
-                    this.gl.activeTexture(this.gl.TEXTURE0 + data);
-                    this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, texture);
-
-                    this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, this.gl.RGBA, image[0].width, image[0].height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image[0]!);
-                    this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, this.gl.RGBA, image[1].width, image[1].height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image[1]!);
-                    this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, this.gl.RGBA, image[2].width, image[2].height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image[2]!);
-                    this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_POSITIVE_X, 0, this.gl.RGBA, image[3].width, image[3].height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image[3]!);
-                    this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 0, this.gl.RGBA, image[4].width, image[4].height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image[4]!);
-                    this.gl.texImage2D(this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 0, this.gl.RGBA, image[5].width, image[5].height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image[5]!);
-                    
-                    this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
-
-                    this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-                    this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-                    this.gl.uniform1i(this.programs[program_name].uniforms[name].location, data);
-                }
+                if (typeof data === 'number') this.gl.uniform1i(this.programs[program_name].uniforms[name].location, data);;
+                break;
         }
     }
 
@@ -283,6 +328,7 @@ export class Canvas {
             if (call.pre_draw) call.pre_draw(this);
 
             this.gl.useProgram(call.program.program);
+            this.bindTexutres(call.program.name);
 
             const program_name = call.program.name;
 
@@ -413,6 +459,7 @@ export class AtlasCanvas extends Canvas {
     proj: mat4;
     time: number;
     id_selected: number;
+    selected_factor: number;
 
     constructor(element: HTMLCanvasElement, width: number, height: number, canvasManager: CanvasManager) {
         super(element, width, height);
@@ -423,20 +470,21 @@ export class AtlasCanvas extends Canvas {
         this.proj = mat4.create()
         this.view = mat4.create();
         this.id_selected = 0;
+        this.selected_factor = 0;
 
         this.compileProgram('sky', canvasManager.programs['skybox'].vertex, canvasManager.programs['skybox'].fragment);
 
         this.addAttribute('screenPosition', 'sky', 2, this.gl.FLOAT, false, 0, 0, this.gl.ARRAY_BUFFER, true);
         this.attributeData('screenPosition', 'sky', new Float32Array([-1,1, 1,1, -1,-1, 1,1, 1,-1, -1,-1]))
         
-        this.addUniform('skybox', 'sky', UniformType.CubeMap, 0);
+        this.createTexture(UniformType.CubeMap, 0, [...canvasManager.skyboxes['space']]);
+        this.addUniform('skybox', 'sky', UniformType.CubeMap, 0, 0);
         this.addUniform('time', 'sky', UniformType.Float, 1);
         this.addUniform('z_rot', 'sky', UniformType.Float, 1);
         this.addUniform('aspect_ratio', 'sky', UniformType.Float, 1);
         this.addUniform('proj', 'sky', UniformType.Matrix4, -1);
         this.addUniform('view', 'sky', UniformType.Matrix4, -1);
 
-        this.uniformData('skybox', 'sky', 1, [...canvasManager.skyboxes['space']]);
         this.uniformData('time', 'sky', 0);
         this.uniformData('time', 'sky', this.rotation[0]);
         this.uniformData('aspect_ratio', 'sky', this.element.width/this.element.height);
@@ -448,9 +496,25 @@ export class AtlasCanvas extends Canvas {
 
         this.addDrawCall('sky', 6, 0, -1, [], {depth_ignore: true});
 
+        this.compileProgram('atlas-text', canvasManager.programs['atlas-text'].vertex, canvasManager.programs['atlas-text'].fragment);
+        this.createTexture(UniformType.Texture2D, 1, canvasManager.assets['character_tilemap'], [this.gl.CLAMP_TO_EDGE, this.gl.CLAMP_TO_EDGE])
+        this.addUniform('tilemap', 'atlas-text', UniformType.Texture2D, 1, 1)
+        this.addAttribute('vertexPosition',  'atlas-text', 3, this.gl.FLOAT, false, 0, 0, this.gl.ARRAY_BUFFER, true);
+        this.addAttribute ('vertexColor', 'atlas-text', 3, this.gl.FLOAT, false, 0, 0, this.gl.ARRAY_BUFFER, false);
+        //this.attributeData('vertexPosition', 'atlas-text', new Float32Array([-1,1/16,1, 1,1/16,1, -1,-1/16,1, 1,1/16,1, 1,-1/16,1, -1,-1/16,1]));
+        //this.attributeData('vertexColor', 'atlas-text', new Float32Array([0,1,0, 1,1,0, 0,0,0, 1,1,0, 1,0,0, 0,0,0]));
+        this.addUniform('proj', 'atlas-text', UniformType.Matrix4, -1);
+        this.addUniform('view', 'atlas-text', UniformType.Matrix4, -1);
+
+        this.uniformData('proj', 'atlas-text',  this.proj);
+        this.uniformData('view', 'atlas-text', this.view);
+
+        //this.addDrawCall('atlas-text', 6, 0, 1, [], {depth_ignore: true});
+
         this.compileProgram('3d-test', canvasManager.programs['3d-test'].vertex, canvasManager.programs['3d-test'].fragment);
         this.addUniform('time', '3d-test', UniformType.Float, 1);
-        this.addUniform('selected', '3d-test', UniformType.Integer, 1);
+        this.addUniform('id',    '3d-test', UniformType.Integer, 1);
+        this.addUniform('selected', '3d-test', UniformType.Float, 1);
         this.addUniform('proj', '3d-test', UniformType.Matrix4, -1);
         this.addUniform('view', '3d-test', UniformType.Matrix4, -1);
         this.uniformData('proj', '3d-test',  this.proj);
@@ -473,10 +537,22 @@ export class AtlasCanvas extends Canvas {
         this.attributeData('vertexPosition', '3d-test', ico[0]);
         this.attributeData('vertexColor',    '3d-test', ico[1]);
 
+        const title_verts = generate_title(ico[2][0]);
+        this.attributeData('vertexPosition', 'atlas-text', title_verts[0]);
+        this.attributeData('vertexColor', 'atlas-text', title_verts[1]);
+        this.addDrawCall('atlas-text', 6, 0, 1, [], {depth_ignore: true}, () => {
+            if (this.id_selected !== 0) {
+                const title_verts = generate_title(ico[2][this.id_selected-1]);
+                this.attributeData('vertexPosition', 'atlas-text', title_verts[0]);
+                this.attributeData('vertexColor', 'atlas-text', title_verts[1]);
+            }
+        })
+
         const len = this.getDrawLength('3d-test')/12;
         for (let i = 0; i < 12; i++) {
             this.addDrawCall('3d-test', len, len*i, 0, [], {}, (c: Canvas) => {
-                c.uniformData('selected', '3d-test', (this.id_selected == (i+1)) ? 1 : 0);
+                c.uniformData('selected', '3d-test', (this.id_selected == (i+1)) ? this.selected_factor : 0);
+                this.uniformData('id', '3d-test', i+1);
             })
         }
 
@@ -484,17 +560,18 @@ export class AtlasCanvas extends Canvas {
         this.attributeData('vertexColor',    '3d-test-pick', ico[1]);
 
         for (let i = 0; i < 12; i++) {
-            this.addDrawCall('3d-test-pick', len, len*i, 0, ['pick-buffer'], {}, () => {
+            this.addDrawCall('3d-test-pick', len, len*i, 0, ['pick-buffer'], {draw_screen: false}, () => {
                 this.uniformData('id', '3d-test-pick', i+1);
             })
         }
 
         this.compileProgram('title', canvasManager.programs['atlas-title'].vertex, canvasManager.programs['atlas-title'].fragment);
-        this.addUniform('iChannel0', 'title', UniformType.Texture2D, 0)
-        this.uniformData('iChannel0', 'title', 0, canvasManager.assets['atlas_title'])
+        this.addUniform('iChannel0', 'title', UniformType.Texture2D, 2, 2)
+        this.createTexture(UniformType.Texture2D, 2, canvasManager.assets['atlas_title'], [this.gl.CLAMP_TO_EDGE, this.gl.CLAMP_TO_EDGE])
+        this.addUniform('time',  'title', UniformType.Float, 1);
         this.addAttribute('vertexPosition', 'title', 2, this.gl.FLOAT, false, 0, 0, this.gl.ARRAY_BUFFER, true);
         this.addAttribute('vertexColor', 'title', 2, this.gl.FLOAT, false, 0, 0, this.gl.ARRAY_BUFFER, false);
-        this.attributeData('vertexPosition', 'title', new Float32Array([-0.3, 0.5,  0.3, 0.5,  0.3, 1,  -0.3, 0.5,  0.3, 1,  -0.3, 1]));
+        this.attributeData('vertexPosition', 'title', new Float32Array([-0.2, 0.6,  0.2, 0.6,  0.2, 0.95,  -0.2, 0.6,  0.2, 0.95,  -0.2, 0.95]));
         this.attributeData('vertexColor', 'title', new Float32Array([0, 1,  1, 1,  1, 0,  0, 1,  1, 0,  0, 0]));
 
         this.addDrawCall('title', 6, 0, 1, [], {depth_ignore: true});
@@ -525,15 +602,25 @@ export class AtlasCanvas extends Canvas {
         this.uniformData('view', 'sky', this.view);
         this.uniformData('view', '3d-test', this.view);
         this.uniformData('view', '3d-test-pick', this.view);
+        this.uniformData('view', 'atlas-text', this.view);
 
         this.time += 1/60;
         this.uniformData('time', 'sky', this.time);
+        this.uniformData('time', 'title', this.time);
         this.uniformData('time', '3d-test', this.time);
         this.uniformData('time', '3d-test-pick', this.time);
         this.uniformData('z_rot', 'sky', this.rotation[0]);
 
         if (this.time % 1/6 < 1/6) {
-            this.id_selected = this.getPixel('3d-test-pick', mouse_pos[0], this.element.height - mouse_pos[1], 'pick-buffer')[0]
+            const pixel = this.getPixel('3d-test-pick', mouse_pos[0], this.element.height - mouse_pos[1], 'pick-buffer')[0]
+            if (this.id_selected == pixel) {
+                this.selected_factor = Math.min(this.selected_factor + 0.1, 1);
+            } else if (pixel == 0) {
+                this.selected_factor = Math.max(this.selected_factor - 0.3, 0)
+            } else {
+                this.selected_factor = 0;
+            }
+            if (pixel != 0) this.id_selected = pixel;
         }
 
         this.render();

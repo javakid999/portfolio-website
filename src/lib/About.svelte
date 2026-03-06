@@ -65,8 +65,11 @@
         Over the years I've also been interested in 3D modeling and music production, and you'll find those projects on this website too.<br/>
         I'm currently 18, and a freshman studying Copmuter Science at UMass Amherst.<br/>
         If you'd like to reach out, business-related or otherwise, feel free to reach out to my email, <span class="yellow">charliecall@umass.edu</span>.<br/><br/>
-        Site last updated: January 5th, 2026
+        Site last updated: February 17th, 2026
     </p>
+    <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"me.jpg"} id={1}>
+        <img id="myself-image" src="./assets/charlie.jpg" alt="me" />
+    </Dragwindow>
     <Dragwindow ParentWidth={viewportWidth} ParentHeight={viewportHeight} Title={"water.exe"} id={3}>
         <div id="canvas-wrapper" role="button" tabindex=0>
             <canvas bind:this={canvasElement} />
@@ -105,6 +108,9 @@
     #stamps {
         position: relative;
     }
+    #myself-image {
+        width: 20em;
+    }
     #pika img {
         object-fit: none;
         object-position: left top;
@@ -112,6 +118,9 @@
     }
     #pika img:active {
         filter: brightness(75%);
+    }
+    #pika img:hover {
+        filter: brightness(90%);
     }
     #canvas-wrapper {
         background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 71%, rgba(0,212,255,0) 71%);

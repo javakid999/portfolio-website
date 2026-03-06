@@ -47,14 +47,12 @@
         c.attributeData('vertexPosition', 'polyhedra', new Float32Array([-1,-1, 1,1, -1,1, -1,-1, 1,-1, 1,1]));
         c.addAttribute('vertexColor',     'polyhedra', 3, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, false);
         c.attributeData('vertexColor',    'polyhedra', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
-        c.addUniform('iTime',     'polyhedra', UniformType.Float, 1);
-        c.uniformData('iTime',    'polyhedra', 0);
-        c.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 1);
+        c.addUniform('iTime',     'polyhedra', UniformType.Float, 1, 0);
+        c.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 0, 0);
+        c.createTexture(UniformType.Texture2D, 0, canvasManager.assets['bayer'])
 
-        c.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1);
-        c.uniformData('shape_num',  'polyhedra', 0);
-        c.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1);
-        c.uniformData('rot_factor', 'polyhedra', 0);
+        c.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1, 0);
+        c.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1, 0);
 
         c2 = new PortfolioButtonCanvas(canvasElement2, 30, 30);
 
@@ -65,12 +63,11 @@
         c2.attributeData('vertexColor',    'polyhedra', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
         c2.addUniform('iTime',     'polyhedra', UniformType.Float, 1);
         c2.uniformData('iTime',    'polyhedra', 0);
-        c2.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 1);
+        c2.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 0, 0);
+        c2.createTexture(UniformType.Texture2D, 0, canvasManager.assets['bayer'])
 
-        c2.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1);
-        c2.uniformData('shape_num',  'polyhedra', 1);
-        c2.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1);
-        c2.uniformData('rot_factor', 'polyhedra', 0.5);
+        c2.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1, 1);
+        c2.addUniform('rot_factor',  'polyhedra', UniformType.Float, 1, 0.5);
 
         c3 = new PortfolioButtonCanvas(canvasElement3, 30, 30);
 
@@ -81,7 +78,8 @@
         c3.attributeData('vertexColor',    'polyhedra', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
         c3.addUniform('iTime',     'polyhedra', UniformType.Float, 1);
         c3.uniformData('iTime',    'polyhedra', 0);
-        c3.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 1);
+        c3.addUniform('iChannel0', 'polyhedra', UniformType.Texture2D, 0, 0);
+        c3.createTexture(UniformType.Texture2D, 0, canvasManager.assets['bayer'])
 
         c3.addUniform('shape_num',   'polyhedra', UniformType.Integer, 1);
         c3.uniformData('shape_num',  'polyhedra', 2);
@@ -91,10 +89,6 @@
 
     onMount(() => {
         initCanvases();
-
-        c.uniformData('iChannel0',  'polyhedra', 0, canvasManager.assets['bayer']);
-        c2.uniformData('iChannel0', 'polyhedra', 0, canvasManager.assets['bayer']);
-        c3.uniformData('iChannel0', 'polyhedra', 0, canvasManager.assets['bayer']);
 
         c.addDrawCall('polyhedra', 6, 0, 0);
         c2.addDrawCall('polyhedra', 6, 0, 0);

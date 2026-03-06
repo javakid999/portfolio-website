@@ -32,8 +32,8 @@
         c.attributeData('vertexColor',    'shader-display', new Float32Array([0,0,0, 1,1,0, 0,1,0, 0,0,0, 1,0,0, 1,1,0]));
         c.addUniform('iTime',  'shader-display', UniformType.Float, 1);
         c.uniformData('iTime', 'shader-display', 0);
-        c.addUniform('iChannel0',  'shader-display', UniformType.Texture2D, 1);
-        c.uniformData('iChannel0', 'shader-display', 0, canvasManager.assets['bayer']);
+        c.addUniform('iChannel0', 'shader-display', UniformType.Texture2D, 0, 0);
+        c.createTexture(UniformType.Texture2D, 0, canvasManager.assets['bayer'])
 
         c2.compileProgram('shader-display', canvasManager.programs['donut'].vertex, canvasManager.programs['donut'].fragment);
         c2.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
@@ -44,9 +44,11 @@
         c2.uniformData('iTime', 'shader-display', 0);
         c2.addUniform('iChannel0', 'shader-display', UniformType.Texture2D, 1);
         c2.addUniform('iChannel1', 'shader-display', UniformType.Texture2D, 1);
-
-        c2.uniformData('iChannel0', 'shader-display', 0, canvasManager.assets['bayer']);
-        c2.uniformData('iChannel1', 'shader-display', 1, canvasManager.assets['ascii']);
+        
+        c2.addUniform('iChannel0', 'shader-display', UniformType.Texture2D, 0, 0);
+        c2.addUniform('iChannel1', 'shader-display', UniformType.Texture2D, 1, 1);
+        c2.createTexture(UniformType.Texture2D, 0, canvasManager.assets['bayer']);
+        c2.createTexture(UniformType.Texture2D, 1, canvasManager.assets['ascii']);
 
         c3.compileProgram('shader-display', canvasManager.programs['metaballs'].vertex, canvasManager.programs['metaballs'].fragment);
         c3.addAttribute('vertexPosition',  'shader-display', 2, c.gl.FLOAT, false, 0, 0, c.gl.ARRAY_BUFFER, true);
