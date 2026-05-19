@@ -1,61 +1,13 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  export let ParentWidth: number, ParentHeight: number;
   export let Title;
   export let id: number;
 
     onMount(() => {
-        dragElement(document.getElementById(`window-${id}`)!);
         const elmnt = document.getElementById(`window-${id}`)!;
-        elmnt.style.left = (Math.random() * (ParentWidth - elmnt.clientWidth)).toString() + 'px';
-        elmnt.style.top = (Math.random() * (ParentHeight*0.7 - elmnt.clientHeight)).toString() + 'px';
     });
     
     let visibility = 'visible';
-
-    function dragElement(elmnt: HTMLElement) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    document.getElementById(`window-${id}header`)!.onmousedown = dragMouseDown;
-
-    function dragMouseDown(e: MouseEvent) {
-        e = e || window.event;
-        e.preventDefault();
-        // get the mouse cursor position at startup:
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
-        document.onmousemove = elementDrag;
-    }
-
-    function elementDrag(e: MouseEvent) {
-        e = e || window.event;
-        e.preventDefault();
-        // calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        if (elmnt.offsetLeft < 0 || elmnt.offsetTop < 0) {
-            elmnt.style.left = (parseInt(elmnt.style.left) - (elmnt.offsetLeft < 0 ? elmnt.offsetLeft : 0)).toString();
-            elmnt.style.top = (parseInt(elmnt.style.top) - (elmnt.offsetTop < 0 ? elmnt.offsetTop : 0)).toString();
-        }
-        if (elmnt.offsetLeft+elmnt.clientWidth > ParentWidth) {
-            elmnt.style.left = (ParentWidth-elmnt.clientWidth).toString()+'px';
-        } 
-        if (elmnt.offsetTop+elmnt.clientHeight > ParentHeight) {
-            elmnt.style.top = (ParentHeight-elmnt.clientHeight).toString()+'px';
-        }
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-    }
-
-    function closeDragElement() {
-        // stop moving when mouse button is released:
-        document.onmouseup = null;
-        document.onmousemove = null;
-    }
-    }
 </script>
 
 <div id="window-{id}" class="dragwindow">
@@ -83,14 +35,12 @@
 
 <style>
     .dragwindow {
-        position: absolute;
         z-index: 9;
         padding: 0.5vh;
         box-shadow: 3px 3px #ffffffbb inset, -3px -3px #00000044 inset;
         background-color: #d4d0c8;
     }
     .dragwindowheader {
-        cursor: move;
         z-index: 10;
     }
     #minimize {

@@ -63,7 +63,7 @@
         When I was 10 years old, I read the book "Javascript for Kids" by Nick Morgan, and have been obsessed with programming ever since. <br/>
         I created this website as a place to host my many projects I've worked on whilst learning Computer Science.<br/>
         Over the years I've also been interested in 3D modeling and music production, and you'll find those projects on this website too.<br/>
-        I'm currently 18, and a freshman studying Copmuter Science at UMass Amherst.<br/>
+        I'm currently 18, and a freshman studying Copmuter Science and Mathematics at UMass Amherst.<br/>
         If you'd like to reach out, business-related or otherwise, feel free to reach out to my email, <span class="yellow">charliecall@umass.edu</span>.<br/><br/>
         Site last updated: February 17th, 2026
     </p>

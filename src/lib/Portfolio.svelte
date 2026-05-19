@@ -36,9 +36,9 @@
 
 <style>
     #viewport-wrapper {
-        background-image: url('/backgrounds/frutiger-aero.jpeg');
-        background-size: 100vw;
-        background-position-y: center;
+        background-image: url('/backgrounds/dithered_water.png');
+        image-rendering: pixelated;
+        background-size: 200vh;
         text-align: center;
         height: 150svh;
         overflow:hidden;
