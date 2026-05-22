@@ -30,6 +30,7 @@
       "15": "./music/15.mp3",
       "16": "./music/16.mp3",
       "17": "./music/17.mp3",
+      "18": "./music/18.mp3",
     };
 
     const bpms: {[key: string]: number} = {
@@ -50,6 +51,7 @@
         "15": 120,
         "16": 154,
         "17": 168,
+        "18": 168,
     }
 
     function change_song() {
@@ -170,6 +172,7 @@
       <option value="15">leroy - ricky bobby</option>
       <option value="16">leroy - the joke is on you</option>
       <option value="17">Vylet Pony - ANTONYMPH (N1GHTC0R3 M1X)</option>
+      <option value="18">OrangeLazer - turn up ur speakers xd</option>
     </optgroup>
   </select>
   <canvas id="audio-visualizer" bind:this={audioVis} on:click={() =>{visMode = visMode^1}}></canvas>

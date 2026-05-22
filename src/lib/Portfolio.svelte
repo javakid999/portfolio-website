@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { CanvasManager } from "./canvasManager";
-    import PortfolioTabs from "./PortfolioTabs.svelte";
+    import PortfolioTabs from "./portfolio/PortfolioTabs.svelte";
 
     export let canvasManager: CanvasManager;
 
@@ -32,6 +32,8 @@
         <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:6" width="60px"/>
         <img src="assets-portfolio/bubble.png" alt="bubble" style="--i:7" width="60px"/>
     </div>
+    <img id="tree" src="assets-portfolio/tree.gif" alt="tree" />
+    <img id="tree-2" src="assets-portfolio/tree.gif" alt="tree" />
 </div>
 
 <style>
@@ -62,6 +64,22 @@
         50% {transform: translate(-20px, 500px)}
         75% {transform: translate(20px, 250px)}
         100% {transform: translate(-20px 0px)}
+    }
+
+    #tree {
+        user-select: none;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 20em;
+    }
+
+    #tree-2 {
+        user-select: none;
+        position: absolute;
+        top: 35%;
+        right: 0;
+        width: 20em;
     }
 
     #bubbles-left {
